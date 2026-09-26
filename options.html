@@ -1,1 +1,107 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>GitHub Bookmark Settings</title><style>body{margin:0;padding:28px;background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.container{max-width:600px;margin:auto}h1{color:#58a6ff}.field{margin-bottom:18px}label{display:block;margin-bottom:6px;color:#8b949e;font-weight:600}input{width:100%;box-sizing:border-box;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;padding:10px}.helper{color:#8b949e;font-size:12px;margin-top:6px}button{border:0;background:#238636;color:#fff;border-radius:6px;padding:10px 16px;font-weight:700;cursor:pointer}.status{display:none;margin-top:18px;color:#3fb950}.status.visible{display:block}</style></head><body><div class="container"><h1>GitHub Bookmark Settings</h1><div class="field"><label for="githubToken">GitHub Personal Access Token</label><input id="githubToken" type="password" placeholder="github_pat_..."><div class="helper">Use a fine-grained token with Contents: Read and write access to the bookmark repository.</div></div><div class="field"><label for="bookmarkRepo">Bookmark repository</label><input id="bookmarkRepo" value="Shutupmilo/github-bookmarks"></div><div class="field"><label for="bookmarkFile">Bookmark file</label><input id="bookmarkFile" value="BOOKMARKS.json"></div><button id="saveSettings">Save settings</button><div id="status" class="status">Settings saved.</div></div><script>document.addEventListener('DOMContentLoaded',async()=>{const s=await chrome.storage.sync.get({githubToken:'',bookmarkRepo:'Shutupmilo/github-bookmarks',bookmarkFile:'BOOKMARKS.json'});for(const k of ['githubToken','bookmarkRepo','bookmarkFile'])document.getElementById(k).value=s[k];document.getElementById('saveSettings').addEventListener('click',async()=>{const s={githubToken:document.getElementById('githubToken').value.trim(),bookmarkRepo:document.getElementById('bookmarkRepo').value.trim(),bookmarkFile:document.getElementById('bookmarkFile').value.trim()||'BOOKMARKS.json'};if(!s.githubToken||!s.bookmarkRepo)return alert('Token and repository are required.');await chrome.storage.sync.set(s);document.getElementById('status').classList.add('visible')})});</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Bookmark Settings</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 28px;
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #58a6ff;
+      margin-bottom: 20px;
+    }
+    .field {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+    .helper {
+      color: #8b949e;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    button {
+      border: none;
+      background: #238636;
+      color: white;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2ea043;
+    }
+    .status {
+      margin-top: 18px;
+      display: none;
+      border-radius: 6px;
+      background: rgba(35, 134, 54, 0.12);
+      color: #3fb950;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .status.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GitHub Bookmark Settings</h1>
+    
+    <div class="field">
+      <label for="githubToken">GitHub Personal Access Token</label>
+      <input id="githubToken" type="password" placeholder="github_pat_...">
+      <div class="helper">Use a fine-grained token with Contents: Read and write access to the bookmark repository.</div>
+    </div>
+
+    <div class="field">
+      <label for="bookmarkRepo">Bookmark repository</label>
+      <input id="bookmarkRepo" type="text" value="Shutupmilo/github-bookmarks">
+      <div class="helper">Format: owner/repo</div>
+    </div>
+
+    <div class="field">
+      <label for="bookmarkFile">Bookmark file</label>
+      <input id="bookmarkFile" type="text" value="BOOKMARKS.json">
+      <div class="helper">File path in the repository</div>
+    </div>
+
+    <button id="saveButton">Save settings</button>
+    <div id="status" class="status">✅ Settings saved successfully.</div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
