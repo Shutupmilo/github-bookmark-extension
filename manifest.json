@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Bookmark Saver",
+  "version": "1.0.0",
+  "description": "Save GitHub repository, folder, and file bookmarks to a destination GitHub repository as JSON metadata.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://github.com/*", "https://api.github.com/*"],
+  "action": {"default_title": "Save GitHub bookmark", "default_popup": "popup.html"},
+  "options_page": "options.html"
+}
