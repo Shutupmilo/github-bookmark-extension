@@ -1,40 +1,35 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // Load existing settings from storage
-  const config = await chrome.storage.sync.get({
+  const status = document.getElementById('status');
+  const fields = ['githubToken', 'bookmarkRepo', 'bookmarkFile'];
+
+  // Load saved settings
+  const saved = await chrome.storage.sync.get({
     githubToken: '',
     bookmarkRepo: 'Shutupmilo/github-bookmarks',
     bookmarkFile: 'BOOKMARKS.json'
   });
 
-  document.getElementById('githubToken').value = config.githubToken;
-  document.getElementById('bookmarkRepo').value = config.bookmarkRepo;
-  document.getElementById('bookmarkFile').value = config.bookmarkFile;
+  fields.forEach((key) => {
+    const el = document.getElementById(key);
+    if (el) el.value = saved[key];
+  });
 
-  // Save settings when button is clicked
-  document.getElementById('saveButton').addEventListener('click', async () => {
-    const token = document.getElementById('githubToken').value.trim();
-    const repo = document.getElementById('bookmarkRepo').value.trim();
-    const file = document.getElementById('bookmarkFile').value.trim() || 'BOOKMARKS.json';
+  document.getElementById('saveSettings').addEventListener('click', async () => {
+    const settings = {
+      githubToken: document.getElementById('githubToken').value.trim(),
+      bookmarkRepo: document.getElementById('bookmarkRepo').value.trim(),
+      bookmarkFile: document.getElementById('bookmarkFile').value.trim() || 'BOOKMARKS.json'
+    };
 
-    if (!token || !repo) {
-      alert('GitHub token and repository are required.');
+    if (!settings.githubToken || !settings.bookmarkRepo) {
+      alert('Token and repository are required.');
       return;
     }
 
-    try {
-      await chrome.storage.sync.set({
-        githubToken: token,
-        bookmarkRepo: repo,
-        bookmarkFile: file
-      });
+    await chrome.storage.sync.set(settings);
 
-      const statusEl = document.getElementById('status');
-      statusEl.classList.add('visible');
-      setTimeout(() => {
-        statusEl.classList.remove('visible');
-      }, 3000);
-    } catch (error) {
-      alert('Error saving settings: ' + error.message);
-    }
+    // Visual feedback
+    status.classList.add('visible');
+    setTimeout(() => status.classList.remove('visible'), 2000);
   });
 });
